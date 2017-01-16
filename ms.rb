@@ -1,14 +1,14 @@
 require 'set'
+@visited = Set.new
 
 ROWS = 5
 COLS = 10
-NUM = 5
+NUM = 3
 
 mines = Array.new(ROWS) { Array.new(COLS) }
 @playfield = Array.new(ROWS) { Array.new(COLS) }
 
-@visited = Set.new
-
+# no vale pq se repiten
 #NUM.times do
 #  mines[rand(ROWS)][rand(COLS)] = true
 #end
@@ -64,7 +64,6 @@ end
 
 # game loop
 def reveal_adjacent(mines, y, x)
-  zeros = []
   (-1).upto(1).each do |dx|
     (-1).upto(1).each do |dy|
       next if dx.zero? && dy.zero?
@@ -74,14 +73,20 @@ def reveal_adjacent(mines, y, x)
       next if y + dy >= ROWS
 
       content = minecounter(mines, y + dy, x + dx)
-      if content.zero?
-        zeroes << [y + dy, x + dx]
-      end
-
       @playfield[y + dy][x + dx] = content
+      #p_p
+      #puts @visited.inspect
+      #gets
+      if @playfield[y + dy][x + dx].zero? && !@visited.include?([y + dy, x + dx])
+        @visited << [y + dy, x + dx]
+        reveal_adjacent(mines, y + dy, x + dx)
+      end
     end
   end
-  zeroes
+end
+
+def left
+  @playfield.flatten.select(&:nil?).size
 end
 
 loop do
@@ -96,15 +101,19 @@ loop do
     x, y = input.split(',').map &:to_i
 
     if mines[y][x]
+      puts 'lose!'
       exit 1
     end
     content = minecounter(mines, y, x)
-    if content.zero? # reveal adjacent
-      z = reveal_adjacent(mines, y, x)
-      until z.empty?
-      end
-    end
-    @visited << [y, x]
     @playfield[y][x] = content
+    @visited << [y, x]
+    if content.zero? # reveal adjacent
+      reveal_adjacent(mines, y, x)
+    end
+
+    if left == NUM
+      puts 'the winner is you!'
+      exit 0
+    end
   end
 end
