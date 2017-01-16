@@ -1,9 +1,13 @@
+require 'set'
+
 ROWS = 5
 COLS = 10
 NUM = 5
 
 mines = Array.new(ROWS) { Array.new(COLS) }
-playfield = Array.new(ROWS) { Array.new(COLS) }
+@playfield = Array.new(ROWS) { Array.new(COLS) }
+
+@visited = Set.new
 
 #NUM.times do
 #  mines[rand(ROWS)][rand(COLS)] = true
@@ -25,8 +29,8 @@ def p_m(mines)
   end
 end
 
-def p_p(mines)
-  mines.each do |row|
+def p_p
+  @playfield.each do |row|
     puts row.map { |c| c ? c.to_s : '.' }.join
   end
 end
@@ -59,7 +63,8 @@ def tally(mines)
 end
 
 # game loop
-def reveal_adjacent(mines, playfield, y, x)
+def reveal_adjacent(mines, y, x)
+  zeros = []
   (-1).upto(1).each do |dx|
     (-1).upto(1).each do |dy|
       next if dx.zero? && dy.zero?
@@ -69,17 +74,18 @@ def reveal_adjacent(mines, playfield, y, x)
       next if y + dy >= ROWS
 
       content = minecounter(mines, y + dy, x + dx)
-      if content.zero? # reveal adjacent
-        reveal_adjacent(mines, playfield, y + dy, x + dx) if playfield[y + dy][x + dx].nil?
+      if content.zero?
+        zeroes << [y + dy, x + dx]
       end
 
-      playfield[y + dy][x + dx] = content
+      @playfield[y + dy][x + dx] = content
     end
   end
+  zeroes
 end
 
 loop do
-  p_p playfield
+  p_p
   puts
   p_m mines
   puts
@@ -94,8 +100,11 @@ loop do
     end
     content = minecounter(mines, y, x)
     if content.zero? # reveal adjacent
-      reveal_adjacent(mines, playfield, y, x)
+      z = reveal_adjacent(mines, y, x)
+      until z.empty?
+      end
     end
-    playfield[y][x] = content
+    @visited << [y, x]
+    @playfield[y][x] = content
   end
 end
