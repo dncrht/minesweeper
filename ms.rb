@@ -1,12 +1,12 @@
 require 'set'
-@visited = Set.new
+visited = Set.new
 
 ROWS = 5
 COLS = 10
 NUM = 3
 
 mines = Array.new(ROWS) { Array.new(COLS) }
-@playfield = Array.new(ROWS) { Array.new(COLS) }
+playfield = Array.new(ROWS) { Array.new(COLS) }
 
 c = NUM
 until c.zero?
@@ -18,8 +18,8 @@ until c.zero?
   end
 end
 
-def p_p
-  @playfield.each do |row|
+def p_p(playfield)
+  playfield.each do |row|
     puts row.map { |c| c ? c.to_s : '.' }.join
   end
 end
@@ -44,7 +44,7 @@ def minecounter(mines, y, x)
 end
 
 # game loop
-def reveal_adjacent(mines, y, x)
+def reveal_adjacent(visited, playfield, mines, y, x)
   (-1).upto(1).each do |dx|
     (-1).upto(1).each do |dy|
       next if dx.zero? && dy.zero?
@@ -53,26 +53,26 @@ def reveal_adjacent(mines, y, x)
       next if x + dx >= COLS
       next if y + dy >= ROWS
 
-      reveal_position(mines, y + dy, x + dx)
+      reveal_position(visited, playfield, mines, y + dy, x + dx)
     end
   end
 end
 
-def left
-  @playfield.flatten.select(&:nil?).size
+def left(playfield)
+  playfield.flatten.select(&:nil?).size
 end
 
-def reveal_position(mines, y, x)
+def reveal_position(visited, playfield, mines, y, x)
   content = minecounter(mines, y, x)
-  @playfield[y][x] = content
-  if content.zero? && !@visited.include?([y, x])
-    @visited << [y, x]
-    reveal_adjacent(mines, y, x)
+  playfield[y][x] = content
+  if content.zero? && !visited.include?([y, x])
+    visited << [y, x]
+    reveal_adjacent(visited, playfield, mines, y, x)
   end
 end
 
 loop do
-  p_p
+  p_p(playfield)
   puts
   input = gets.strip
   if input.include? ','
@@ -82,9 +82,9 @@ loop do
       puts 'lose!'
       exit 1
     end
-    reveal_position(mines, y, x)
+    reveal_position(visited, playfield, mines, y, x)
 
-    if left == NUM
+    if left(playfield) == NUM
       puts 'the winner is you!'
       exit 0
     end
