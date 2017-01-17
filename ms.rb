@@ -7,16 +7,14 @@ class Playfield
     @cols = cols
 
     @revealed_squares = Set.new
-    @mines = Array.new(rows) { Array.new(cols) }
+    @mines = Set.new
     @playfield = Array.new(rows) { Array.new(cols) }
 
-    c = mine_number
-    until c.zero?
-      x = rand(cols)
-      y = rand(rows)
-      unless @mines[y][x]
-        @mines[y][x] = true
-        c -= 1
+    until mine_number.zero?
+      mine_position = [rand(rows), rand(cols)]
+      unless @mines.include?(mine_position)
+        @mines << mine_position
+        mine_number -= 1
       end
     end
   end
@@ -28,7 +26,7 @@ class Playfield
   end
 
   def has_mine?(y, x)
-    @mines[y][x]
+    @mines.include?([y, x])
   end
 
   def mines_around(y, x)
@@ -41,7 +39,7 @@ class Playfield
         next if x + dx >= @cols
         next if y + dy >= @rows
 
-        if @mines[y + dy][x + dx]
+        if has_mine?(y + dy, x + dx)
           count += 1
         end
       end
