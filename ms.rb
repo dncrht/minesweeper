@@ -86,22 +86,25 @@ class Game
   end
 
   def play
+    @playfield.display
+
     loop do
-      @playfield.display
-      puts
+      puts "Enter position to reveal as: y, x"
       input = gets.strip
 
       if input.include? ','
-        x, y = input.split(',').map &:to_i
+        y, x = input.split(',').map &:to_i
 
         if @playfield.has_mine?(y, x)
-          puts 'lose!'
+          puts "\n\nLose!"
           exit 1
         end
         @playfield.reveal_square(y, x)
+        puts
+        @playfield.display
 
         if @playfield.squares_left?
-          puts 'the winner is you!'
+          puts "\n\nThe winner is you!"
           exit 0
         end
       end
