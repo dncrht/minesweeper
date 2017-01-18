@@ -2,7 +2,8 @@ require 'set'
 require_relative 'square'
 
 class Playfield
-  def initialize(mine_number:, rows:, cols:)
+  def initialize(display_set:, mine_number:, rows:, cols:)
+    @display_set = display_set
     @mine_number = mine_number
     @rows = rows
     @cols = cols
@@ -22,7 +23,7 @@ class Playfield
 
   def display
     @playfield.each do |row|
-      puts row.map { |content| Square.new(:emoji).display(content) }.join
+      puts row.map { |content| Square.new(@display_set).display(content) }.join
     end
   end
 

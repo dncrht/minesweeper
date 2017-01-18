@@ -1,18 +1,11 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
 require_relative 'playfield'
 
 class Game
-  ROWS = 5
-  COLS = 10
-  NUM = 3
-
-  def initialize(argv)
-    @playfield = Playfield.new(
-      mine_number: argv[0] || NUM,
-      rows:        argv[1] || ROWS,
-      cols:        argv[2] || COLS,
-    )
+  def initialize(options)
+    @playfield = Playfield.new(**options)
   end
 
   def play
@@ -36,7 +29,7 @@ class Game
         if @playfield.squares_left?
           @playfield.display_with_mines
           puts "\n\nThe winner is you!"
-          exit 0
+          exit
         end
         @playfield.display
       end
@@ -45,5 +38,40 @@ class Game
 end
 
 if $0.include? 'game.rb'
-  Game.new(ARGV.map &:to_i).play
+  options = {
+    display_set: :emoji,
+    mine_number: 3,
+    rows:        5,
+    cols:        10,
+  }
+
+  opt_parser = OptionParser.new do |opt|
+    opt.banner = 'Usage: game [OPTIONS]'
+    opt.separator ''
+    opt.separator 'Options'
+
+    opt.on('-d', '--display_set SET', 'display the playfield using text or emoji (default)') do |display_set|
+      options[:display_set] = display_set.to_sym
+    end
+
+    opt.on('-m', '--mine_number NUMBER', 'number of mines') do |mine_number|
+      options[:mine_number] = mine_number.to_i
+    end
+
+    opt.on('-r', '--rows NUMBER', 'number of rows') do |rows|
+      options[:rows] = rows.to_i
+    end
+
+    opt.on('-c', '--cols NUMBER', 'number of columns') do |cols|
+      options[:cols] = cols.to_i
+    end
+
+    opt.on('-h', '--help', 'this message') do |environment|
+      puts opt_parser
+      exit
+    end
+  end
+  opt_parser.parse!
+
+  Game.new(options).play
 end
