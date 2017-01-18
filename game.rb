@@ -25,18 +25,20 @@ class Game
       if input.include? ','
         y, x = input.split(',').map &:to_i
 
+        puts
         if @playfield.has_mine?(y, x)
+          @playfield.display_with_mines
           puts "\n\nLose!"
           exit 1
         end
         @playfield.reveal_square(y, x)
-        puts
-        @playfield.display
 
         if @playfield.squares_left?
+          @playfield.display_with_mines
           puts "\n\nThe winner is you!"
           exit 0
         end
+        @playfield.display
       end
     end
   end

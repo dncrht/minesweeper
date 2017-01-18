@@ -1,4 +1,5 @@
 require 'set'
+require_relative 'square'
 
 class Playfield
   def initialize(mine_number:, rows:, cols:)
@@ -21,8 +22,16 @@ class Playfield
 
   def display
     @playfield.each do |row|
-      puts row.map { |cell| cell ? cell.to_s : '.' }.join
+      puts row.map { |content| Square.new(:emoji).display(content) }.join
     end
+  end
+
+  def display_with_mines
+    @mines.each do |mine|
+      y, x = mine
+      @playfield[y][x] = true
+    end
+    display
   end
 
   def has_mine?(y, x)
