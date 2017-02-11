@@ -2,6 +2,7 @@ require 'set'
 require_relative 'square'
 
 class Playfield
+
   def initialize(display_set:, mine_number:, rows:, cols:)
     @display_set = display_set
     @mine_number = mine_number
@@ -58,7 +59,7 @@ class Playfield
     count
   end
 
-  def squares_left?
+  def all_squares_revealed?
     @playfield.flatten.select(&:nil?).size == @mine_number
   end
 

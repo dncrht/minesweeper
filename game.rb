@@ -26,7 +26,7 @@ class Game
         end
         @playfield.reveal_square(y, x)
 
-        if @playfield.squares_left?
+        if @playfield.all_squares_revealed?
           @playfield.display_with_mines
           puts "\n\nThe winner is you!"
           exit
