@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'optparse'
-require_relative 'game'
+require 'minesweeper'
 
 options = {
   display_set: :emoji,
@@ -11,7 +11,7 @@ options = {
 }
 
 opt_parser = OptionParser.new do |opt|
-  opt.banner = 'Usage: game [OPTIONS]'
+  opt.banner = 'Usage: minesweeper [OPTIONS]'
   opt.separator ''
   opt.separator 'Options'
 
@@ -38,4 +38,4 @@ opt_parser = OptionParser.new do |opt|
 end
 opt_parser.parse!
 
-Game.new(options).play
+Minesweeper::Game.new(options).play

@@ -1,16 +1,23 @@
-The classic minesweeper [game](https://en.wikipedia.org/wiki/Minesweeper_(video_game)), implemented in Ruby, for command line terminals.
+A minimalistic Ruby implementation for the classic minesweeper [game](https://en.wikipedia.org/wiki/Minesweeper_(video_game)).
 
-The objective is to reveal the content of all the squares without a mine.
+In case you don't know, the objective is to reveal the content of all the squares without a mine.
+
+# Installation
+
+It comes conveniently packaged as a gem:
+
+`gem install minesweeper-cli`
+
 
 # How to launch the game
 
 From the command line:
 
-`./game`
+`minesweeper`
 
 To get some help and options:
 
-`./game -h`
+`minesweeper -h`
 
 By default it's a 10x5 grid, with 3 hidden mines.
 
