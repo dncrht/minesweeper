@@ -6,6 +6,15 @@ module Minesweeper
     let(:options) { {mine_number: 0, display_set: :text, rows: 3, cols: 3} }
     subject { described_class.new(**options) }
 
+    describe '#within_boundaries?' do
+      it { expect(subject.within_boundaries?(3, 3)).to eq false }
+      it { expect(subject.within_boundaries?(3, 3)).to eq false }
+      it { expect(subject.within_boundaries?(3, 0)).to eq false }
+      it { expect(subject.within_boundaries?(0, -1)).to eq false }
+      it { expect(subject.within_boundaries?(0, 0)).to eq true }
+      it { expect(subject.within_boundaries?(2, 2)).to eq true }
+    end
+
     describe '#has_mine?' do
       it 'does not have a mine at position' do
         subject.instance_variable_set :@mines, [[0, 0]]

@@ -16,6 +16,8 @@ module Minesweeper
         if input.include? ','
           y, x = input.split(',').map &:to_i
 
+          next unless @playfield.within_boundaries?(y, x)
+
           puts
           if @playfield.has_mine?(y, x)
             @playfield.display_with_mines

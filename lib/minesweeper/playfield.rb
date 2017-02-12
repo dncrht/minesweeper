@@ -37,6 +37,10 @@ module Minesweeper
       display
     end
 
+    def within_boundaries?(y, x)
+      y >= 0 && y < @rows && x >= 0 && x < @cols
+    end
+
     def has_mine?(y, x)
       @mines.include?([y, x])
     end
