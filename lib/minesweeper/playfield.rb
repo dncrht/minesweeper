@@ -4,21 +4,21 @@ require_relative 'square'
 module Minesweeper
   class Playfield
 
-    def initialize(display_set:, mine_number:, rows:, cols:)
-      @display_set = display_set
-      @mine_number = mine_number
-      @rows = rows
-      @cols = cols
+    def initialize(options = {})
+      @display_set = options[:display_set]
+      @mine_number = options[:mine_number]
+      @rows = options[:rows]
+      @cols = options[:cols]
 
       @revealed_squares = Set.new
       @mines = Set.new
-      @playfield = Array.new(rows) { Array.new(cols) }
+      @playfield = Array.new(@rows) { Array.new(@cols) }
 
-      until mine_number.zero?
-        mine_position = [rand(rows), rand(cols)]
+      until options[:mine_number].zero?
+        mine_position = [rand(@rows), rand(@cols)]
         unless @mines.include?(mine_position)
           @mines << mine_position
-          mine_number -= 1
+          options[:mine_number] -= 1
         end
       end
     end

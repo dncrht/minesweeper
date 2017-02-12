@@ -3,7 +3,7 @@ require_relative 'playfield'
 module Minesweeper
   class Game
     def initialize(options)
-      @playfield = Playfield.new(**options)
+      @playfield = Playfield.new(options)
     end
 
     def play
